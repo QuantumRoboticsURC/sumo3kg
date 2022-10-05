@@ -4,14 +4,15 @@ import utime
 
 def main():
     while True:
-        read_button()
+        read_ground()
         utime.sleep(.1)
 
 def read_ground():
     global ground_front, ground_back, ground
-    for i in range(2):
-        ground_front[i] = ground[i].value()
-        ground_back[i] = ground[i+2].value()
+    ground_front[1] = ground[2].value()
+    ground_front[0] = ground[3].value()
+    ground_back[0] = ground[1].value()
+    ground_back[1] = ground[0].value()
     print("ground_front: "+str(ground_front)+"      ground_back: "+str(ground_back))
 
 def read_laser():    
@@ -34,20 +35,19 @@ def read_button():
     print(str(on_button.value()))
 
 # Declaration of 4 ground sensors (10,12,14,16)
-"""ground = [Pin(x, Pin.IN) for x in [7,9,10,12]]
+ground = [Pin(x, Pin.IN) for x in [7,9,10,12]]#1 black 0 blanco
 ground_front = [0]*2
-ground_back = [0]*2"""
+ground_back = [0]*2
 
 # Declaration of 5 laser sensors  (31,32,34,2,5)
-"""laser = [Pin(x, Pin.IN) for x in [26,27,28,1,3]]
+laser = [Pin(x, Pin.IN) for x in [26,27,28,1,3]] #1 detecta algo
 lateral = [0]*2
 lateral_front = [0]*2
-front = 0"""
+front = 0
 
 # Declaration of 4 buttons (24-27)
-"""buttons = [Pin(x, Pin.IN, Pin.PULL_UP) for x in range(18,22)]
-buttons_value = [0]*len(buttons)"""
+buttons = [Pin(x, Pin.IN, Pin.PULL_UP) for x in range(18,22)]
+buttons_value = [0]*len(buttons) #0 = on
 on_button = Pin(4, Pin.IN)
 
-#configuration()
 main()

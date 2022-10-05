@@ -45,7 +45,7 @@ def search():
     global state, counter, ground_front, ground_back , last
     if state == 'straight':
         if 0 in ground_front:
-            counter = 60
+            counter = 125
             state = "back"
             if ground_front[0] == 0:
                 last = "turn_left"
@@ -60,7 +60,7 @@ def search():
         if counter > 0:
             counter -= 1                  
         else:
-            counter  = 40#Turn
+            counter  = 50#Turn
             state = last
 
 def _map(x, in_min, in_max, out_min, out_max):

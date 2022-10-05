@@ -3,54 +3,34 @@ from machine import Pin, PWM
 import utime
 
 def main(): 
-    global state, ground_back, ground_front, counter, counter_b
+    global state
     while True:
         if not on_button.value():
             print("nel")
             put_velocity(0, 0)
-            utime.sleep(.001)    
+            utime.sleep(.1)    
         else:        
             print("osiosi")
             read_values()
-            
-            if 0 in ground_front:
-                search()
-                put_state()
-            elif 0 in ground_back:
-                if ground_back[0] and ground_back[1]:
-                    print("rapidismo al frente")
-                    put_velocity(20,20)
-                    counter_b = 100
-                elif ground_back[0]:
-                    print("Gira izquierda")
-                    put_velocity(10,20)
-                    counter_b = 100
-                else:
-                    print("Gira Derecha")
-                    put_velocity(20,10)
-                    counter_b = 100
-            elif counter_b == 0:
-                search()
-                put_state()
-            else:
-                print("Atras")
-                counter_b-=1
-                
-            
+            search()
+            put_state()
             print(state)
-            utime.sleep(.001)
+            utime.sleep(.1)
         
 def search():
     """Random Search"""
     global state, counter, ground_front, ground_back , last
     if state == 'straight':
         if 0 in ground_front:
-            counter = 60
+            # stop
+            put_velocity(0,0)
+            utime.sleep(.1)
+            counter = 10
             state = "back"
             if ground_front[0] == 0:
-                last = "turn_left"
-            else:
                 last = "turn_right"
+            else:
+                last = "turn_left"
     elif state == 'turn_left' or state == "turn_right":
         if counter > 0:
             counter -= 1     
@@ -60,7 +40,7 @@ def search():
         if counter > 0:
             counter -= 1                  
         else:
-            counter  = 40#Turn
+            counter  = 30#random.randint(5, 14)
             state = last
 
 def _map(x, in_min, in_max, out_min, out_max):
@@ -75,17 +55,13 @@ def put_state():
     if state == "stop":
         put_velocity(0,0)
     elif state == "straight":
-        vel = 80
-        put_velocity(vel,vel)
+        put_velocity(10,10)
     elif state == "turn_left":
-        vel = 100
-        put_velocity(vel,-vel)
+        put_velocity(10,-10)
     elif state == "turn_right":
-        vel = 100
-        put_velocity(-vel,vel)
+        put_velocity(-10,10)
     elif state == "back":
-        vel = -100
-        put_velocity(vel,vel)
+        put_velocity(10,10)
 
 def read_values():
     read_ground()
@@ -114,7 +90,6 @@ put_velocity(0, 0)
 
 state = 'straight'
 counter = 0
-counter_b = 0
 start = None
 
 main()
