@@ -10,25 +10,26 @@ def main():
             put_velocity(0, 0)
             utime.sleep(.001)    
         else:        
-            print("osiosi")
             read_values()
             
             if 0 in ground_front:
                 search()
                 put_state()
             elif 0 in ground_back:
-                if ground_back[0] and ground_back[1]:
+                #print(ground_back)
+                if ground_back[0] == 0 and ground_back[1] == 0:
                     print("rapidismo al frente")
-                    put_velocity(20,20)
-                    counter_b = 100
-                elif ground_back[0]:
-                    print("Gira izquierda")
-                    put_velocity(10,20)
-                    counter_b = 100
-                else:
-                    print("Gira Derecha")
-                    put_velocity(20,10)
-                    counter_b = 100
+                    vel = 100
+                    put_velocity(vel,vel)
+                    counter_b = 30
+                elif ground_back[0] == 0:
+                    print("Gira derecha")
+                    put_velocity(80,60)
+                    counter_b = 15
+                elif ground_back[1] == 0:
+                    print("Gira Izquierda")
+                    put_velocity(60,80)
+                    counter_b = 15
             elif counter_b == 0:
                 search()
                 put_state()
@@ -37,7 +38,7 @@ def main():
                 counter_b-=1
                 
             
-            print(state)
+            #print(state)
             utime.sleep(.001)
         
 def search():
@@ -45,7 +46,7 @@ def search():
     global state, counter, ground_front, ground_back , last
     if state == 'straight':
         if 0 in ground_front:
-            counter = 60
+            counter = 80
             state = "back"
             if ground_front[0] == 0:
                 last = "turn_left"
@@ -55,12 +56,12 @@ def search():
         if counter > 0:
             counter -= 1     
         else:
-            state = 'straight'
+            state = 'stop'
     elif state == "back":
         if counter > 0:
             counter -= 1                  
         else:
-            counter  = 40#Turn
+            counter  = 110#Turn
             state = last
 
 def _map(x, in_min, in_max, out_min, out_max):
@@ -75,16 +76,16 @@ def put_state():
     if state == "stop":
         put_velocity(0,0)
     elif state == "straight":
-        vel = 80
+        vel = 70
         put_velocity(vel,vel)
     elif state == "turn_left":
-        vel = 100
+        vel = 80
         put_velocity(vel,-vel)
     elif state == "turn_right":
-        vel = 100
+        vel = 80
         put_velocity(-vel,vel)
     elif state == "back":
-        vel = -100
+        vel = -80
         put_velocity(vel,vel)
 
 def read_values():
@@ -112,7 +113,7 @@ right_wheel = PWM(Pin(16))
 right_wheel.freq(frequency)
 put_velocity(0, 0)
 
-state = 'straight'
+state = 'stop'
 counter = 0
 counter_b = 0
 start = None
