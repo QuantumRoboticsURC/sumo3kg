@@ -2,9 +2,8 @@ import random
 from machine import Pin, PWM
 import utime
 
-last = " "
 def main(): 
-    global state, ground_back, ground_front, counter, counter_b, last
+    global state, ground_back, ground_front, counter, last
     global laser_value, lateral, lateral_front, front
     while True:
         if not on_button.value():
@@ -13,31 +12,30 @@ def main():
             utime.sleep(.001)
         else:        
             read_values()
-            
 
             if 0 in ground_front:
                 search()
                 put_state()
             elif 0 in ground_back:
+                state = 'straight'
                 #print(ground_back)
                 if ground_back[0] == 0 and ground_back[1] == 0:
                     #print("rapidismo al frente")
-                    vel = 100
+                    vel = 75
                     put_velocity(vel,vel)
-                    counter_b = 30
                 elif ground_back[0] == 0:
                     #print("Gira derecha")
-                    put_velocity(80,60)
-                    counter_b = 15
+                    put_velocity(75,55)
                 elif ground_back[1] == 0:
                     #print("Gira Izquierda")
-                    put_velocity(60,80)
-                    counter_b = 15
-            elif 1 == front:
+                    put_velocity(55,75)
+            """elif 1 == front:
                 #print("frente")
                 state == "straight"
                 put_state()
+                last = " "
             elif 1 in lateral_front:
+                state = 'straight'
                 if lateral_front[0]:
                     #print("Gira Izquierda")
                     put_velocity(20,60)
@@ -47,6 +45,7 @@ def main():
                     put_velocity(60,20)
                     last = "right"
             elif 1 in lateral:
+                state = 'straight'
                 vel = 60
                 if lateral[0]:
                     #print("Gira Izquierda recio")                    
@@ -55,28 +54,33 @@ def main():
                 else:
                     #print("Gira derecha recio")
                     put_velocity(vel,-vel)
-                    last = "right_recio"
+                    last = "right_recio""""
             else:
-                if last == " ":
+                searh()
+                """if last == " ":
                     search()
                     put_state()
                 elif last == "right":
+                    state = 'straight'
                     put_velocity(40,20)
                 elif last == "left":
+                    state = 'straight'
                     put_velocity(20,40)
                 elif last == "left_recio":
+                    state = 'straight'
                     put_velocity(-60,60)
                 elif last == "right_recio":
-                    put_velocity(60,-60)
-                counter_b-=1
+                    state = 'straight'
+                    put_velocity(60,-60)"""
                             
             utime.sleep(.001)
 
 def search():
     """Random Search"""
     global state, counter, ground_front, ground_back , last
+    last = " "
     if 0 in ground_front:
-        counter = 80
+        counter = 800
         state = "back"
         if ground_front[0] == 0:
             last = "turn_left"
@@ -91,7 +95,7 @@ def search():
         if counter > 0:
             counter -= 1                  
         else:
-            counter  = 110#Turn
+            counter  = 1100#Turn
             state = last
 
 def _map(x, in_min, in_max, out_min, out_max):
@@ -109,13 +113,13 @@ def put_state():
         vel = 70
         put_velocity(vel,vel)
     elif state == "turn_left":
-        vel = 80
+        vel = 75
         put_velocity(vel,-vel)
     elif state == "turn_right":
-        vel = 80
+        vel = 75
         put_velocity(-vel,vel)
     elif state == "back":
-        vel = -80
+        vel = -75
         put_velocity(vel,vel)
 
 def read_values():
@@ -163,7 +167,6 @@ put_velocity(0, 0)
 
 state = 'straight'
 counter = 0
-counter_b = 0
-start = None
+last = " "
 
 main()
