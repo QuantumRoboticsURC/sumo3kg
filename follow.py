@@ -57,6 +57,7 @@ def main():
                     last = "right_recio""""
             else:
                 searh()
+                put_state()
                 """if last == " ":
                     search()
                     put_state()
