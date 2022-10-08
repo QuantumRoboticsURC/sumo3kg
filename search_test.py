@@ -5,14 +5,17 @@ import utime
 def main(): 
     global state, ground_back, ground_front, counter, counter_b, last
     global laser_value, lateral, lateral_front, front, last_laser
-    vel_ini = 80
+
+    vel_ini = 75
     started = False
+    init_time = 1000
+
     while True:
         if not on_button.value() and buttons_value[0] == 0:
             print("nel")
             put_velocity(0, 0)
-            read_values()
-            utime.sleep(.01)    
+            read_buttons()
+            utime.sleep(.01)
         else:        
             read_values()
                        
@@ -34,7 +37,6 @@ def main():
                 last_laser = " "
                 search()
                 put_state()
-                print(state)
             elif state == "back":
                 started = True
                 if counter > 0:
@@ -45,7 +47,54 @@ def main():
                     else:                
                         counter  = 20#Turn
                     state = last
-                put_state()            
+                put_state()   
+            elif not started:
+                # Leer segun el boton
+                if buttons_value[1] == 0:
+                    if buttons_value[2] == 0:
+                        #Frente
+                        if buttons_value[3] == 0:
+                            # Avanzar recto
+                            print("Avanzar recto")
+                            put_velocity(vel_ini,vel_ini)
+                        else:
+                            # Avanzar recto (delay)
+                            print("Avanzar recto delay")
+                            utime.sleep(2)
+                            put_velocity(vel_ini,vel_ini)                            
+                    else:
+                        # Espalda
+                        print("Espalda")
+                        if buttons_value[3] == 0:
+                            # Girar Izquierda
+                            put_velocity(-vel_ini,vel_ini)
+                        else:
+                            # Girar Derecha
+                            put_velocity(vel_ini,-vel_ini)
+                else:                    
+                    # Lateral
+                    print("Lateral")
+                    if buttons_value[2] == 0:
+                        # Girar
+                        if buttons_value[3] == 0:
+                            # Izquierda
+                            put_velocity(-vel_ini,vel_ini)
+                        else:
+                            # Derecha
+                            put_velocity(vel_ini,-vel_ini)
+                    else:
+                        # Avanzar y luego girar
+                        if buttons[3] == 0:
+                            # Izquierda
+                            put_velocity(40,75)
+                            utime.sleep(.2)
+                            put_velocity(-vel_ini,vel_ini)
+                        else:
+                            # Derecha
+                            put_velocity(vel_ini,vel_ini)
+                            utime.sleep(1)
+                            put_velocity(vel_ini,-vel_ini)   
+                started = True      
             elif 1 == front:
                 started = True
                 state = "straight"
@@ -63,16 +112,12 @@ def main():
                 started = True
                 state = 'straight'
                 vel = 80
-                if lateral[0]:
-                    #print("Gira Izquierda recio")                    
+                if lateral[0]:           
                     put_velocity(-vel,vel)
                     last = "left_recio"
                 else:
-                    #print("Gira derecha recio")
                     put_velocity(vel,-vel)
-                    last = "right_recio"
-            elif not started:
-                put_velocity(-vel_ini,vel_ini)
+                    last = "right_recio"                
             elif counter_b == 0:
                 if last_laser == " ":
                     search()
@@ -151,7 +196,6 @@ def put_state():
 def read_values():
     read_ground()
     read_laser()
-    read_buttons()
 
 def read_ground():
     global ground_front, ground_back, ground
@@ -175,7 +219,7 @@ def read_buttons():
     global buttons_value
     for i in range(len(buttons)):
         buttons_value[i] = buttons[i].value()
-    print("buttons: "+str(buttons_value))
+    #print("buttons: "+str(buttons_value))
 
 # Declaration of 4 ground sensors (10,12,14,16)
 ground = [Pin(x, Pin.IN) for x in [7,9,10,12]]#1 black 0 blanco
@@ -205,6 +249,5 @@ state = 'straight'
 counter = 0
 counter_b = 0
 last_laser = " "
-start = None
 
 main()
