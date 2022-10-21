@@ -13,7 +13,7 @@ class Sumo():
 
         # Declaration of 4 buttons (24-27)
         self.buttons = [Pin(x, Pin.IN, Pin.PULL_UP) for x in range(18,22)]
-        self.buttons_value = [0]*len(buttons) #0 = on
+        self.buttons_value = [0]*len(self.buttons) #0 = on
         self.on_button = Pin(4, Pin.IN) # arriba apagado, abajo prendido 
 
         # Declaration of 5 laser sensors  (31,32,34,2,5)
@@ -25,9 +25,9 @@ class Sumo():
         #PWM
         self.frequency = 300  #10Khz
         self.left_wheel = PWM(Pin(17))
-        self.left_wheel.freq(frequency)
+        self.left_wheel.freq(self.frequency)
         self.right_wheel = PWM(Pin(16))
-        self.right_wheel.freq(frequency)
+        self.right_wheel.freq(self.frequency)
         self.put_velocity(0, 0)
 
         self.state = 'straight'
@@ -36,8 +36,8 @@ class Sumo():
         self.last_laser = " "
 
     def read_values(self):
-        read_ground()
-        read_laser()
+        self.read_ground()
+        self.read_laser()
 
     def read_ground(self):
         self.ground_front[1] = self.ground[2].value()
@@ -56,7 +56,7 @@ class Sumo():
         #print("lateral: "+str(lateral)+"      lateral_front: "+str(lateral_front)+"       front: "+str(front))
 
     def read_buttons(self):
-        for i in range(len(buttons)):
+        for i in range(len(self.buttons)):
             self.buttons_value[i] = self.buttons[i].value()
         #print("buttons: "+str(buttons_value))
     
@@ -64,8 +64,8 @@ class Sumo():
         return int((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
 
     def put_velocity(self, left, right):    
-        self.left_wheel.duty_ns(_map(left,-100,100,2000000,1000000))
-        self.right_wheel.duty_ns(_map(right,-100,100,2000000,1000000))
+        self.left_wheel.duty_ns(self._map(left,-100,100,2000000,1000000))
+        self.right_wheel.duty_ns(self._map(right,-100,100,2000000,1000000))
 
     def put_state(self):
         """put velocities in one state"""
