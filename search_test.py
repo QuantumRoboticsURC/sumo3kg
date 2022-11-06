@@ -6,7 +6,7 @@ def main():
     global state, ground_back, ground_front, counter, counter_b, last
     global laser_value, lateral, lateral_front, front, last_laser
 
-    vel_ini = 80
+    vel_ini = 90
     started = False
     init_time = 1000
 
@@ -52,53 +52,20 @@ def main():
                 # Leer segun el boton
                 if buttons_value[1] == 0:
                     if buttons_value[2] == 0:
-                        #Frente
                         if buttons_value[3] == 0:
                             # Avanzar recto
-                            print("Espalda, girar izquierda")                            
-                            put_velocity(-vel_ini,vel_ini)
-                            utime.sleep(.2)
+                            print("Vuelta abierta")
+                            put_velocity(vel_ini,10)              
+                            utime.sleep(.4)
                         else:
                             # Avanzar recto (delay)
-                            print("Avanzar recto delay")
-                            utime.sleep(2)
-                            put_velocity(vel_ini,vel_ini)                            
-                    else:
-                        # Espalda                        
-                        if buttons_value[3] == 0:
-                            # Girar Izquierda                            
-                            print("Avanzar recto")
-                            put_velocity(vel_ini,vel_ini)
-                        else:
-                            # Girar Derecha
-                            print("Espalda, girar derecha")
-                            put_velocity(vel_ini,-vel_ini)
-                else:                    
-                    # Lateral                    
-                    if buttons_value[2] == 0:
-                        # Girar
-                        if buttons_value[3] == 0:
-                            print("Lateral girar izquierda")
-                            # Izquierda
+                            print("Espalda, girar izquierda")                            
                             put_velocity(-vel_ini,vel_ini)
-                        else:
-                            # Derecha
-                            print("Lateral girar derecha")
-                            put_velocity(vel_ini,-vel_ini)
-                    else:                        
-                        # Avanzar y luego girar
-                        if buttons[3] == 0:
-                            print("avanzar y luego girar izquierda")
-                            # Izquierda
-                            put_velocity(40,75)
-                            utime.sleep(.2)
-                            put_velocity(-vel_ini,vel_ini)
-                        else:
-                            # Derecha
-                            print("avanzar y luego girar derecha")
-                            put_velocity(vel_ini,vel_ini)
-                            utime.sleep(1)
-                            put_velocity(vel_ini,-vel_ini)   
+                            utime.sleep(.2)    
+                    else:                                                                
+                        print("Avanzar recto delay")
+                        utime.sleep(2)
+                        put_velocity(vel_ini,vel_ini)                            
                 started = True      
             elif 1 == front:
                 started = True
