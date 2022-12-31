@@ -17,6 +17,7 @@ class Strategy():
                 self.sumo.put_velocity(0, 0)
                 self.sumo.read_buttons()
             else:
+                print("yes")
                 self.sumo.read_values()
                 if 0 in self.sumo.ground_back:
                     self.back("back")           
@@ -79,8 +80,8 @@ class Strategy():
             self.sumo.put_state()
         elif what == "front":
             self.sumo.last_laser = " "
-                self.search()
-                self.sumo.put_state()
+            self.search()
+            self.sumo.put_state()
         else:
             self.last_laser = " "
             if self.sumo.ground_back[0] == 0 and self.sumo.ground_back[1] == 0:
@@ -98,9 +99,9 @@ class Strategy():
         self.started = True
         if what == "front":
             self.started = True
-                self.state = "straight"
-                self.sumo.put_state()
-                self.last_laser = " "
+            self.state = "straight"
+            self.sumo.put_state()
+            self.last_laser = " "
         elif what == "lateral_front":
             if self.sumo.lateral_front[0]:
                 self.sumo.put_velocity(20,75)
@@ -108,7 +109,7 @@ class Strategy():
             else:
                 self.sumo.put_velocity(75,20)
                 self.last_laser = "right"
-        elif what == "lateral"
+        elif what == "lateral":
             self.state = 'straight'
             self.vel = 85
             if self.sumo.lateral[0]:

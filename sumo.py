@@ -56,7 +56,7 @@ class Sumo():
     def read_buttons(self):
         for i in range(len(self.buttons)):
             self.buttons_value[i] = self.buttons[i].value()  
-        self.on = self.sumo.on_button.value() or self.sumo.buttons_value[0] != 0
+        self.on = self.on_button.value() or self.buttons_value[0] != 0
     
     def _map(self,x, in_min, in_max, out_min, out_max):
         return int((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min)
@@ -82,14 +82,14 @@ class Sumo():
             vel = -70
             self.put_velocity(vel,vel)
         
-    self go(self, vel, dir):
-        if dir == "front":
+    def go(self, vel, dirr):
+        if dirr == "front":
             self.put_velocity(vel,vel)
         else:
             self.put_velocity(-vel,-vel)
     
-    self rotate_self(self, vel, dir):
-        if dir == "right":
+    def rotate_self(self, vel, dirr):
+        if dirr == "right":
             self.put_velocity(vel, -vel)
         else:
             self.put_velocity(-vel, vel)
