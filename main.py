@@ -25,14 +25,14 @@ class Strategy():
                     self.back("front")
                 elif self.state == "back":
                     self.back()
-                elif not started:
+                """elif not started:
                     self.predefined()
                 elif 1 == self.sumo.front:
                     self.attack("front")
                 elif 1 in self.sumo.lateral_front:
                     self.attack("lateral_front")
                 elif 1 in self.sumo.lateral:
-                    self.attack("lateral")            
+                    self.attack("lateral")"""
                 elif self.counter_b == 0:
                     self.counter_b_to_0()                   
                 else:
@@ -91,7 +91,7 @@ class Strategy():
             elif self.sumo.ground_back[0] == 0:
                 self.sumo.put_velocity(75,50)
                 self.counter_b = 20
-            elif ground_back[1] == 0:
+            elif self.ground_back[1] == 0:
                 self.sumo.put_velocity(50,75)
                 self.counter_b = 20
 
